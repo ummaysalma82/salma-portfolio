@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<!-- Ummay Salma portfolio — Soft Beige & Editorial theme. Quick settings (logo image, section images, contact form, email) live in SITE_CONFIG near the end of this file. Full guide: DOCUMENTATION.md -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#F7F3ED" />
+  <meta name="description" content="Ummay Salma — Product Designer, UI &amp; UX Designer and Graphic Designer. Exploring thoughtful digital product experiences." />
+  <title>Ummay Salma — Product Designer &amp; UI/UX Designer</title>
+
+  <!-- Fonts: Instrument Serif (headlines) + Inter (text). Needs internet; if offline the page falls back to Georgia / system sans. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+
+  <style>
+    /* -------------------------------------------------------
+       SOFT BEIGE & EDITORIAL THEME
+       Change the colour tokens below to retheme the whole site.
+    -------------------------------------------------------- */
+    :root {
+      /* Brand palette */
+      --bg: #F7F3ED;          /* page background (cream) */
+      --primary: #292824;     /* headings, buttons, strong lines */
+      --secondary: #E8DFD2;   /* beige panels, placeholders */
+      --accent: #B96E50;      /* terracotta highlights */
+      --text: #66615B;        /* body text */
+
+      /* Derived shades (made from the palette for contrast / depth) */
+      --accent-ink: #9A5439;  /* darker accent — used for small accent text so it stays readable */
+      --surface: #FBF8F3;     /* slightly lighter cream for cards, form, pop-up */
+      --line: rgba(41, 40, 36, .13);
+      --line-strong: rgba(41, 40, 36, .28);
+      --error: #A33A2B;
+      --success: #4C6B3C;
+
+      /* Type */
+      --serif: "Instrument Serif", "Cormorant Garamond", Georgia, "Times New Roman", serif;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+      /* Shape */
+      --radius-xl: 36px;
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --radius-sm: 12px;
+      --container: 1200px;
+      --shadow: 0 24px 60px rgba(41, 40, 36, .12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    /* soft paper grain */
+    body::before {
+      content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .05;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .16  0 0 0 0 .16  0 0 0 0 .14  0 0 0 .7 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    }
+    a { color: inherit; text-decoration: none; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; }
+    img, svg { max-width: 100%; }
+    h1, h2, h3 { margin: 0; color: var(--primary); font-family: var(--serif); font-weight: 400; }
+    em { font-style: italic; }
+    .container { width: min(var(--container), calc(100% - 56px)); margin-inline: auto; }
+    .section { padding: 112px 0; position: relative; }
+
+    .section-kicker { display: inline-flex; align-items: center; gap: 12px; color: var(--accent-ink); font-size: .72rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; }
+    .section-kicker::before { content: ""; width: 28px; height: 1px; background: var(--accent-ink); }
+    .section-heading { max-width: 760px; margin: 18px 0 16px; font-size: clamp(2.6rem, 5.4vw, 4.6rem); line-height: 1.02; letter-spacing: -.015em; }
+    .section-heading em, .hero h1 em, .contact-panel h2 em { color: var(--accent); }
+    .section-copy { max-width: 560px; margin: 0; font-size: 1rem; }
+    .eyebrow { color: var(--accent-ink); font-size: .74rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+
+    /* Header */
+    .site-header { position: fixed; z-index: 50; top: 0; left: 0; width: 100%; border-bottom: 1px solid transparent; transition: background .25s, border-color .25s, backdrop-filter .25s; }
+    .site-header.scrolled { background: rgba(247, 243, 237, .88); border-color: var(--line); backdrop-filter: blur(14px); }
+    .nav { min-height: 82px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
+    .brand { display: inline-flex; align-items: center; gap: 12px; white-space: nowrap; }
+
+    /* Logo: typographic "US" monogram. If SITE_CONFIG.logoImage is set (see script), the image replaces it. */
+    .brand-mark { position: relative; display: grid; place-items: center; flex: 0 0 auto; width: 46px; height: 46px; overflow: hidden; border: 1.5px solid var(--primary); border-radius: 50%; background: var(--secondary); transition: transform .3s, background .3s; }
+    .brand:hover .brand-mark { transform: rotate(-8deg); background: var(--bg); }
+    .brand-mark-text { display: inline-flex; align-items: baseline; padding-bottom: 3px; font-family: var(--serif); font-size: 1.5rem; line-height: 1; letter-spacing: -.1em; }
+    .brand-mark-text .u { color: var(--primary); }
+    .brand-mark-text .s { padding-right: .08em; color: var(--accent); font-style: italic; }
+    .brand-logo-img { display: none; }
+    .brand.has-logo-image .brand-mark { width: auto; min-width: 46px; overflow: visible; border-color: transparent; border-radius: 0; background: none; }
+    .brand.has-logo-image .brand-mark-text { display: none; }
+    .brand.has-logo-image .brand-logo-img { display: block; width: auto; height: 46px; max-width: 180px; object-fit: contain; }
+    .brand.hide-name .brand-word { display: none; }
+    .brand-word { color: var(--primary); font-family: var(--serif); font-size: 1.55rem; line-height: 1; letter-spacing: -.01em; }
+    .brand-word em { color: var(--accent); }
+
+    .nav-links { display: flex; align-items: center; gap: 34px; margin-left: auto; }
+    .nav-links a { position: relative; color: var(--text); font-size: .88rem; font-weight: 500; transition: color .2s; }
+    .nav-links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -5px; height: 1px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .25s; }
+    .nav-links a:hover, .nav-links a:focus-visible { color: var(--primary); }
+    .nav-links a:hover::after, .nav-links a:focus-visible::after { transform: scaleX(1); }
+
+    .button, .nav-cta {
+      display: inline-flex; justify-content: center; align-items: center; gap: 10px; min-height: 50px; padding: 0 26px;
+      border: 1px solid var(--primary); border-radius: 999px; color: var(--bg); background: var(--primary);
+      font-size: .88rem; font-weight: 600; cursor: pointer; transition: transform .2s, background .2s, color .2s, border-color .2s;
+    }
+    .button:hover, .nav-cta:hover { transform: translateY(-2px); background: var(--accent-ink); border-color: var(--accent-ink); }
+    .button.quiet, .nav-cta { color: var(--primary); background: transparent; border-color: var(--line-strong); }
+    .button.quiet:hover, .nav-cta:hover { color: var(--bg); background: var(--primary); border-color: var(--primary); }
+    .nav-cta { min-height: 44px; padding: 0 20px; }
+    .button svg, .nav-cta svg { width: 16px; height: 16px; }
+    .menu-toggle { display: none; width: 46px; height: 46px; border: 1px solid var(--line-strong); border-radius: 50%; color: var(--primary); background: transparent; cursor: pointer; }
+
+    /* Hero */
+    .hero { min-height: 800px; display: flex; align-items: center; padding: 150px 0 100px; position: relative; overflow-x: clip; }
+    .hero-grid { display: grid; grid-template-columns: 1.12fr .88fr; align-items: center; gap: 70px; }
+    .availability { display: inline-flex; align-items: center; gap: 10px; padding: 8px 15px; border-radius: 999px; color: var(--primary); background: var(--secondary); font-size: .78rem; font-weight: 500; }
+    .availability-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(185, 110, 80, .2); }
+    .hero .eyebrow { margin: 30px 0 0; }
+    .hero h1 { margin: 18px 0 26px; max-width: 760px; font-size: clamp(3.4rem, 7.4vw, 7rem); line-height: .96; letter-spacing: -.025em; }
+    .hero-description { max-width: 540px; margin: 0; font-size: clamp(1rem, 1.4vw, 1.12rem); line-height: 1.8; }
+    .hero-description strong { color: var(--primary); font-weight: 600; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
+    .hero-meta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--line); color: var(--text); font-size: .8rem; }
+    .meta-separator { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+
+    /* Hero image container (placeholder drawing until SITE_CONFIG.images.hero is set) */
+    .hero-visual { position: relative; width: min(100%, 470px); margin-left: auto; }
+    .hero-frame { position: relative; aspect-ratio: 4 / 5; overflow: hidden; border-radius: var(--radius-xl); background: var(--secondary); box-shadow: var(--shadow); }
+    .hero-art { position: absolute; inset: 0; }
+    .hero-sun { position: absolute; top: 10%; right: -9%; width: 66%; aspect-ratio: 1; border-radius: 50%; background: var(--accent); }
+    .hero-ring { position: absolute; top: 17%; right: -3%; width: 66%; aspect-ratio: 1; border-radius: 50%; border: 1px solid var(--primary); opacity: .45; }
+    .hero-dot { position: absolute; top: 34%; left: 12%; width: 13%; aspect-ratio: 1; border-radius: 50%; background: var(--primary); }
+    .hero-monogram { position: absolute; left: 7%; bottom: 8%; color: var(--primary); font-family: var(--serif); font-size: clamp(8rem, 15vw, 12.5rem); line-height: .75; letter-spacing: -.07em; }
+    .hero-monogram em { color: var(--accent-ink); }
+    .frame-caption { position: absolute; z-index: 2; top: 26px; left: 28px; color: var(--primary); font-size: .66rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; }
+    .hero-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .hero-frame.has-image .hero-art, .hero-frame.has-image .frame-caption { display: none; }
+    .hero-chip { position: absolute; z-index: 3; display: flex; align-items: center; gap: 10px; padding: 10px 16px 10px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--primary); background: var(--surface); box-shadow: 0 14px 34px rgba(41, 40, 36, .12); font-size: .76rem; font-weight: 600; animation: float 6s ease-in-out infinite; }
+    .hero-chip span { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; color: var(--accent-ink); background: var(--secondary); font-size: .8rem; }
+    .chip-top { top: 11%; left: -34px; }
+    .chip-bottom { bottom: 9%; right: -22px; animation-delay: -3s; }
+    @keyframes float { 50% { transform: translateY(-9px); } }
+
+    /* Areas strip */
+    .focus-strip { padding: 26px 0; border-top: 1px solid var(--line-strong); border-bottom: 1px solid var(--line-strong); }
+    .focus-inner { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+    .focus-label { color: var(--text); font-size: .72rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+    .focus-items { display: flex; align-items: center; gap: clamp(18px, 3.5vw, 44px); flex-wrap: wrap; color: var(--primary); font-family: var(--serif); font-size: 1.55rem; line-height: 1.2; font-style: italic; }
+    .focus-items span { display: inline-flex; gap: 14px; align-items: center; }
+    .focus-items i { width: 7px; height: 7px; background: var(--accent); transform: rotate(45deg); }
+
+    /* Projects — editorial grid */
+    .projects-head { display: flex; justify-content: space-between; align-items: end; gap: 40px; margin-bottom: 64px; }
+    .projects-head .section-copy { max-width: 400px; }
+    .project-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 32px; row-gap: 80px; }
+    .project-card { min-width: 0; }
+    .project-card:nth-child(1) { grid-column: 1 / 8; }
+    .project-card:nth-child(2) { grid-column: 8 / 13; margin-top: 110px; }
+    .project-card:nth-child(3) { grid-column: 1 / 6; }
+    .project-card:nth-child(4) { grid-column: 6 / 13; margin-top: 110px; }
+
+    .project-art { --art-bg: var(--secondary); --art-a: var(--accent); --art-b: var(--primary); position: relative; display: grid; place-items: center; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--radius-lg); background: var(--art-bg); cursor: pointer; isolation: isolate; }
+    .project-art::before { content: ""; position: absolute; z-index: -1; top: -22%; right: -12%; width: 62%; aspect-ratio: 1; border-radius: 50%; background: rgba(185, 110, 80, .14); }
+    .art-book { --art-bg: #E6DACA; }
+    .art-delivera { --art-bg: #DDD0BE; --art-a: var(--primary); --art-b: var(--accent); }
+    .art-nestora { --art-bg: #EBD8C9; --art-a: #C98E73; }
+    .art-stockflow { --art-bg: #D9CFBF; --art-a: var(--accent-ink); --art-b: var(--primary); }
+    .art-window { width: 66%; min-height: 52%; padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); box-shadow: var(--shadow); transform: rotate(-2.2deg); transition: transform .5s ease; }
+    .project-card:hover .art-window { transform: rotate(0deg) scale(1.03); }
+    .window-bar { display: flex; gap: 5px; padding-bottom: 11px; border-bottom: 1px solid var(--line); }
+    .window-bar i { width: 6px; height: 6px; border-radius: 50%; background: var(--line-strong); }
+    .window-layout { display: grid; grid-template-columns: 25% 1fr; gap: 12px; padding-top: 12px; }
+    .window-side { display: grid; gap: 7px; align-content: start; }
+    .window-side i { height: 8px; border-radius: 4px; background: var(--secondary); }
+    .window-side i:first-child { background: var(--art-a); }
+    .window-main { display: grid; gap: 8px; }
+    .window-title { width: 54%; height: 11px; border-radius: 5px; background: var(--primary); }
+    .window-line { height: 6px; border-radius: 4px; background: var(--secondary); }
+    .window-line.short { width: 66%; }
+    .window-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-top: 6px; }
+    .window-cards i { height: 54px; border-radius: 8px; background: var(--secondary); }
+    .window-cards i:first-child { background: var(--art-a); }
+    .window-cards i:nth-child(2) { background: var(--art-b); opacity: .85; }
+    .art-label { position: absolute; z-index: 2; left: 24px; bottom: 20px; color: var(--primary); font-size: .64rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+    .project-img { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
+    .project-card:hover .project-img { transform: scale(1.04); }
+    .project-art.has-image::before, .project-art.has-image .art-window, .project-art.has-image .art-label { display: none; }
+
+    .status-badge { display: inline-flex; align-items: center; gap: 8px; padding: 7px 13px; border-radius: 999px; color: var(--bg); background: var(--primary); font-size: .66rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+    .status-badge[hidden] { display: none; }
+    .status-badge i { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 0 rgba(185, 110, 80, .7); animation: pulse 2s infinite; }
+    .art-status { position: absolute; z-index: 2; top: 18px; right: 18px; }
+    @keyframes pulse { 70% { box-shadow: 0 0 0 7px rgba(185, 110, 80, 0); } 100% { box-shadow: 0 0 0 0 rgba(185, 110, 80, 0); } }
+
+    .project-content { padding: 26px 4px 0; }
+    .project-meta { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--line); color: var(--text); font-size: .74rem; }
+    .project-type { color: var(--accent-ink); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+    .project-no { font-family: var(--serif); font-size: 1.05rem; font-style: italic; }
+    .project-content h3 { margin: 18px 0 10px; font-size: clamp(2.2rem, 3.4vw, 3rem); line-height: 1.02; letter-spacing: -.012em; }
+    .project-content p { max-width: 520px; margin: 0; font-size: .95rem; }
+    .project-footer { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 22px; }
+    .tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tag { padding: 5px 11px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--primary); font-size: .7rem; font-weight: 500; }
+    .text-link { display: inline-flex; align-items: center; gap: 8px; padding: 6px 0; border: 0; border-bottom: 1px solid var(--primary); color: var(--primary); background: none; font-size: .84rem; font-weight: 600; white-space: nowrap; cursor: pointer; transition: color .2s, border-color .2s; }
+    .text-link:hover { color: var(--accent-ink); border-color: var(--accent-ink); }
+    .text-link svg { width: 15px; height: 15px; transition: transform .2s; }
+    .text-link:hover svg { transform: translate(3px, -2px); }
+
+    /* About */
+    .about-section { background: var(--secondary); border-radius: 56px; margin: 0 14px; }
+    .about-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 90px; align-items: center; }
+    .about-visual { position: relative; width: min(100%, 470px); }
+    .about-frame { position: relative; aspect-ratio: 1; overflow: hidden; border-radius: var(--radius-xl); background: var(--bg); box-shadow: var(--shadow); isolation: isolate; }
+    .about-art { position: absolute; inset: 0; }
+    .about-arch { position: absolute; left: 11%; bottom: 0; width: 52%; height: 70%; border-radius: 999px 999px 0 0; background: var(--secondary); }
+    .about-sun { position: absolute; top: 12%; right: 10%; width: 30%; aspect-ratio: 1; border-radius: 50%; background: var(--accent); }
+    .about-dot { position: absolute; bottom: 14%; right: 12%; width: 11%; aspect-ratio: 1; border-radius: 50%; background: var(--primary); }
+    
+    .about-img { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: cover; }
+    .about-frame.has-image .about-art { display: none; }
+    .about-frame.has-image::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(41, 40, 36, .62), transparent 45%); }
+    .about-frame.has-image .frame-caption { z-index: 2; color: var(--bg); }
+    .about-sticker { position: absolute; z-index: 3; left: -20px; bottom: 44px; padding: 12px 18px; border-radius: 999px; color: var(--bg); background: var(--primary); box-shadow: 0 14px 34px rgba(41, 40, 36, .22); font-family: var(--serif); font-size: 1.15rem; font-style: italic; white-space: nowrap; transform: rotate(-5deg); }
+    .about-copy p { margin: 0 0 18px; }
+    .about-copy .section-heading { margin-bottom: 22px; }
+    .about-values { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 28px; margin-top: 30px; }
+    .value-card { display: flex; align-items: center; gap: 12px; padding: 15px 0; border-top: 1px solid var(--line-strong); color: var(--primary); font-size: .9rem; font-weight: 500; }
+    .value-card span { display: grid; place-items: center; width: 28px; height: 28px; flex: 0 0 auto; border-radius: 50%; color: var(--accent-ink); background: var(--bg); font-size: .85rem; }
+
+    /* Process */
+    .process-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 26px; margin-top: 60px; }
+    .process-card { padding-top: 22px; border-top: 1px solid var(--primary); transition: border-color .25s, transform .25s; }
+    .process-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+    .process-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .process-number { color: var(--accent-ink); font-size: .68rem; font-weight: 600; letter-spacing: .14em; }
+    .process-icon svg { width: 22px; height: 22px; color: var(--accent-ink); }
+    .process-card h3 { margin: 26px 0 8px; font-size: 2.2rem; line-height: 1; letter-spacing: -.01em; }
+    .process-card p { margin: 0; font-size: .88rem; line-height: 1.65; }
+
+    /* Skills */
+    .skills-layout { display: grid; grid-template-columns: .8fr 1.2fr; gap: 80px; align-items: start; }
+    .skill-groups { display: grid; grid-template-columns: repeat(2, 1fr); gap: 36px 34px; }
+    .skill-box { padding-top: 18px; border-top: 1px solid var(--primary); }
+    .skill-box h3 { display: flex; align-items: center; gap: 10px; margin: 0 0 18px; font-size: 1.7rem; line-height: 1.1; }
+    .skill-box h3 span { color: var(--accent); font-family: var(--sans); font-size: 1rem; }
+    .skill-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .skill-pills span { padding: 6px 13px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--primary); font-size: .76rem; font-weight: 500; transition: background .2s; }
+    .skill-pills span:hover { background: var(--secondary); }
+
+    /* Contact */
+    .contact-panel { position: relative; overflow: hidden; padding: clamp(32px, 6vw, 76px); border-radius: 48px; background: var(--secondary); }
+    .contact-panel::after { content: ""; position: absolute; right: -130px; bottom: -190px; width: 420px; aspect-ratio: 1; border: 1px solid rgba(185, 110, 80, .5); border-radius: 50%; box-shadow: 0 0 0 36px rgba(185, 110, 80, .06), 0 0 0 76px rgba(185, 110, 80, .04); pointer-events: none; }
+    .contact-layout { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+    .contact-main { min-width: 0; }
+    .contact-panel h2 { max-width: 640px; margin: 18px 0 18px; font-size: clamp(2.6rem, 4.8vw, 4.4rem); line-height: 1; letter-spacing: -.015em; }
+    .contact-panel p { max-width: 520px; margin: 0; }
+    .contact-email { display: flex; align-items: center; gap: 14px; max-width: 450px; margin-top: 28px; padding: 13px 15px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+    .contact-email-icon { display: grid; place-items: center; width: 38px; height: 38px; flex: 0 0 auto; border-radius: 50%; color: var(--accent-ink); background: var(--secondary); }
+    .contact-email-text { min-width: 0; }
+    .contact-email-text small { display: block; color: var(--text); font-size: .64rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+    .contact-email-text a { color: var(--primary); font-size: .95rem; font-weight: 600; word-break: break-all; }
+    .contact-email-text a:hover { color: var(--accent-ink); }
+    .copy-email { margin-left: auto; padding: 8px 14px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--primary); background: transparent; font-size: .76rem; font-weight: 600; cursor: pointer; transition: background .2s, color .2s; }
+    .copy-email:hover { color: var(--bg); background: var(--primary); }
+    .contact-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 28px; }
+    .social-links { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 30px; font-size: .84rem; font-weight: 500; }
+    .social-links a { border-bottom: 1px solid var(--line-strong); color: var(--primary); }
+    .social-links a:hover { color: var(--accent-ink); border-color: var(--accent-ink); }
+
+    .contact-form { padding: 32px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow); }
+    .contact-form h3 { margin: 0 0 6px; font-size: 2.2rem; line-height: 1.05; }
+    .contact-panel .contact-form .form-intro { margin: 0 0 24px; max-width: none; font-size: .88rem; }
+    .field { display: grid; gap: 7px; margin-bottom: 17px; }
+    .field label { color: var(--primary); font-size: .78rem; font-weight: 600; }
+    .field input, .field textarea { width: 100%; padding: 14px 16px; border: 1px solid var(--line-strong); border-radius: 14px; color: var(--primary); background: var(--bg); font: inherit; font-size: .92rem; transition: border-color .2s, box-shadow .2s; }
+    .field textarea { min-height: 132px; resize: vertical; }
+    .field input::placeholder, .field textarea::placeholder { color: #9a948b; }
+    .field input:focus, .field textarea:focus { outline: none; border-color: var(--accent-ink); box-shadow: 0 0 0 4px rgba(185, 110, 80, .18); }
+    .field .error-text { display: none; color: var(--error); font-size: .74rem; }
+    .field.invalid input, .field.invalid textarea { border-color: var(--error); }
+    .field.invalid .error-text { display: block; }
+    .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    .form-submit { width: 100%; }
+    .form-submit[disabled] { opacity: .6; cursor: progress; transform: none; }
+    .contact-panel .form-status { min-height: 1.5em; margin: 14px 0 0; max-width: none; font-size: .86rem; }
+    .contact-panel .form-status.success { color: var(--success); }
+    .contact-panel .form-status.error { color: var(--error); }
+    .form-status a { text-decoration: underline; }
+
+    /* Footer */
+    .footer { padding: 38px 0 44px; color: var(--text); font-size: .8rem; }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; padding-top: 26px; border-top: 1px solid var(--line-strong); }
+    .footer-inner > span:first-child { font-family: var(--serif); font-size: 1.15rem; font-style: italic; color: var(--primary); }
+    .back-top { color: var(--primary); font-weight: 600; border-bottom: 1px solid var(--line-strong); }
+    .back-top:hover { color: var(--accent-ink); border-color: var(--accent-ink); }
+
+    /* Project pop-up */
+    dialog { width: min(640px, calc(100% - 30px)); padding: 0; border: 1px solid var(--line); border-radius: var(--radius-lg); color: var(--text); background: var(--surface); box-shadow: 0 40px 100px rgba(41, 40, 36, .35); }
+    dialog::backdrop { background: rgba(41, 40, 36, .5); backdrop-filter: blur(6px); }
+    .dialog-inner { padding: 34px; }
+    .dialog-top { display: flex; justify-content: space-between; gap: 20px; align-items: start; }
+    .dialog-top h3 { margin: 6px 0 0; font-size: 2.8rem; line-height: 1; }
+    .dialog-close { width: 40px; height: 40px; flex: 0 0 auto; border: 1px solid var(--line-strong); border-radius: 50%; color: var(--primary); background: transparent; cursor: pointer; transition: background .2s, color .2s; }
+    .dialog-close:hover { color: var(--bg); background: var(--primary); }
+    .dialog-status { margin-top: 12px; color: var(--primary); background: var(--secondary); text-transform: none; letter-spacing: .02em; font-size: .74rem; }
+    .dialog-inner p { margin: 20px 0 0; }
+    .dialog-details { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
+    .dialog-detail { padding: 15px 16px; border-radius: 16px; background: var(--bg); }
+    .dialog-detail small { display: block; margin-bottom: 5px; color: var(--text); font-size: .66rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+    .dialog-detail strong { color: var(--primary); font-size: .88rem; font-weight: 600; }
+    /* Highlighted Behance link */
+    .case-link { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 22px; padding: 18px 20px; border: 1px solid var(--accent); border-radius: 18px; background: rgba(185, 110, 80, .13); transition: transform .2s, background .2s, box-shadow .2s; }
+    .case-link[hidden] { display: none; }
+    .case-link:hover { transform: translateY(-2px); background: rgba(185, 110, 80, .22); box-shadow: 0 14px 34px rgba(185, 110, 80, .2); }
+    .case-link small { display: block; color: var(--accent-ink); font-size: .66rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+    .case-link strong { display: block; margin-top: 2px; color: var(--primary); font-family: var(--serif); font-size: 1.55rem; font-weight: 400; line-height: 1.15; }
+    .case-link-arrow { display: grid; place-items: center; width: 42px; height: 42px; flex: 0 0 auto; border-radius: 50%; color: #fff; background: var(--accent-ink); transition: transform .2s; }
+    .case-link:hover .case-link-arrow { transform: translate(2px, -2px); }
+    .case-link-arrow svg { width: 17px; height: 17px; }
+
+    /* Motion / accessibility */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    :focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 4px; }
+
+    @media (max-width: 1000px) {
+      .hero-grid { gap: 40px; }
+      .about-grid { gap: 50px; }
+      .process-grid { grid-template-columns: repeat(3, 1fr); row-gap: 40px; }
+      .skills-layout { gap: 44px; }
+      .contact-layout { gap: 40px; }
+    }
+    @media (max-width: 860px) {
+      .hero { min-height: auto; padding: 128px 0 70px; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-visual { margin: 10px auto 0; width: min(100%, 440px); }
+      .chip-top { left: -12px; }
+      .chip-bottom { right: -8px; }
+      .about-grid, .skills-layout, .contact-layout { grid-template-columns: 1fr; }
+      .about-visual { margin: 0 auto; }
+      .about-sticker { left: -8px; }
+      .about-section { border-radius: 40px; }
+    }
+    @media (max-width: 700px) {
+      .container { width: min(100% - 36px, var(--container)); }
+      .section { padding: 76px 0; }
+      .nav { min-height: 72px; }
+      .menu-toggle { display: grid; place-items: center; }
+      .nav-cta { display: none; }
+      .nav-links { display: none; position: absolute; top: 70px; left: 18px; right: 18px; padding: 12px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); box-shadow: var(--shadow); }
+      .nav-links.open { display: grid; gap: 0; }
+      .nav-links a { padding: 14px 12px; border-radius: 12px; }
+      .nav-links a::after { display: none; }
+      .nav-links a:hover { background: var(--secondary); }
+      .brand-word { font-size: 1.4rem; }
+      .hero h1 { font-size: clamp(3.3rem, 15vw, 5rem); }
+      .focus-inner { display: block; }
+      .focus-items { margin-top: 14px; gap: 10px 24px; font-size: 1.35rem; }
+      .projects-head { display: block; margin-bottom: 44px; }
+      .projects-head .section-copy { margin-top: 14px; }
+      .project-grid { grid-template-columns: 1fr; row-gap: 56px; }
+      .project-card:nth-child(n) { grid-column: 1 / -1; margin-top: 0; }
+      .project-footer { align-items: flex-start; flex-direction: column; }
+      .about-section { margin: 0 8px; border-radius: 32px; }
+      .about-values { grid-template-columns: 1fr; }
+      .process-grid { grid-template-columns: repeat(2, 1fr); gap: 34px 20px; }
+      .process-card h3 { font-size: 1.9rem; }
+      .skill-groups { grid-template-columns: 1fr; }
+      .contact-panel { border-radius: 32px; }
+      .contact-form { padding: 22px; }
+      .contact-email { flex-wrap: wrap; }
+      .dialog-inner { padding: 24px; }
+      .dialog-details { grid-template-columns: 1fr; }
+      .dialog-top h3 { font-size: 2.3rem; }
+    }
+    @media (max-width: 420px) {
+      .hero-actions .button { width: 100%; }
+      .process-grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="top" aria-hidden="true"></div>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="#top" aria-label="Ummay Salma home">
+        <span class="brand-mark" aria-hidden="true"><span class="brand-mark-text"><span class="u">U</span><span class="s">S</span></span><img class="brand-logo-img" id="brandLogoImg" alt="" /></span><span class="brand-word">ummay<em>salma.</em></span>
+      </a>
+      <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+        <a href="#work">Work</a>
+        <a href="#about">About</a>
+        <a href="#process">Process</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a class="nav-cta" href="#contact">Let's talk <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="navLinks">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <div class="availability"><span class="availability-dot"></span> Open to thoughtful collaborations</div>
+          <p class="eyebrow">Product Designer · UI &amp; UX Designer · Graphic Designer</p>
+          <h1 id="heroTitle">Designing digital experiences that <em>matter.</em></h1>
+          <p class="hero-description">Hello, I'm <strong>Ummay Salma</strong>. I turn complex ideas into clear, intuitive and meaningful digital experiences through thoughtful research and purposeful design.</p>
+          <div class="hero-actions">
+            <a class="button" href="#work">Explore my work <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
+            <a class="button quiet" href="#contact">Get in touch</a>
+          </div>
+          <div class="hero-meta"><span>Research-led thinking</span><i class="meta-separator"></i><span>Human-centered design</span><i class="meta-separator"></i><span>Responsive interfaces</span></div>
+        </div>
+
+        <div class="hero-visual reveal" id="heroVisual" aria-hidden="true">
+          <div class="hero-frame" id="heroFrame">
+            <div class="hero-art"><span class="hero-sun"></span><span class="hero-ring"></span><span class="hero-dot"></span><span class="hero-monogram">U<em>S</em></span></div>
+            <span class="frame-caption">Product · UI &amp; UX · Graphic</span>
+          </div>
+          <div class="hero-chip chip-top"><span>✦</span> Human-centered</div>
+          <div class="hero-chip chip-bottom"><span>↗</span> Product thinking</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="focus-strip">
+      <div class="container focus-inner">
+        <span class="focus-label">Areas I love working on</span>
+        <div class="focus-items"><span><i></i> Mobile Apps</span><span><i></i> Product Design</span><span><i></i> Web Experiences</span><span><i></i> UX Research</span></div>
+      </div>
+    </div>
+
+    <section class="section" id="work" aria-labelledby="workTitle">
+      <div class="container">
+        <div class="projects-head reveal">
+          <div><span class="section-kicker">Selected work</span><h2 class="section-heading" id="workTitle">A few ideas, made <em>tangible.</em></h2></div>
+          <p class="section-copy">A selection of product concepts and UX case studies. Each project starts with a user need and grows through research, structure and interface design.</p>
+        </div>
+
+        <div class="project-grid">
+          <article class="project-card reveal">
+            <div class="project-art art-book" data-image-key="bookloop">
+              <div class="art-window"><div class="window-bar"><i></i><i></i><i></i></div><div class="window-layout"><div class="window-side"><i></i><i></i><i></i><i></i></div><div class="window-main"><div class="window-title"></div><div class="window-line"></div><div class="window-line short"></div><div class="window-cards"><i></i><i></i><i></i></div></div></div></div>
+              <span class="art-label">Discover · Borrow · Share</span>
+            </div>
+            <div class="project-content">
+              <div class="project-meta"><span class="project-type">Mobile app · UX case study</span><span class="project-no">01 / 04</span></div>
+              <h3>BookLoop</h3>
+              <p>A community-driven book-sharing experience that helps readers discover, borrow and share pre-loved books.</p>
+              <div class="project-footer"><div class="tags"><span class="tag">UX Research</span><span class="tag">Mobile UI</span><span class="tag">Prototyping</span></div><button class="text-link" data-project="bookloop">Explore concept <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></button></div>
+            </div>
+          </article>
+
+          <article class="project-card reveal">
+            <div class="project-art art-delivera" data-image-key="delivera">
+              <div class="art-window"><div class="window-bar"><i></i><i></i><i></i></div><div class="window-layout"><div class="window-side"><i></i><i></i><i></i><i></i></div><div class="window-main"><div class="window-title"></div><div class="window-line"></div><div class="window-line short"></div><div class="window-cards"><i></i><i></i><i></i></div></div></div></div>
+              <span class="art-label">Send with confidence</span>
+            </div>
+            <div class="project-content">
+              <div class="project-meta"><span class="project-type">Delivery app · UX case study</span><span class="project-no">02 / 04</span></div>
+              <h3>Delivera</h3>
+              <p>A parcel delivery concept focused on simple booking, transparent tracking and a reassuring delivery journey.</p>
+              <div class="project-footer"><div class="tags"><span class="tag">User Flow</span><span class="tag">UI Design</span><span class="tag">Tracking</span></div><button class="text-link" data-project="delivera">Explore concept <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></button></div>
+            </div>
+          </article>
+
+          <article class="project-card reveal">
+            <div class="project-art art-nestora" data-image-key="nestora">
+              <div class="art-window"><div class="window-bar"><i></i><i></i><i></i></div><div class="window-layout"><div class="window-side"><i></i><i></i><i></i><i></i></div><div class="window-main"><div class="window-title"></div><div class="window-line"></div><div class="window-line short"></div><div class="window-cards"><i></i><i></i><i></i></div></div></div></div>
+              <span class="art-label">Find a place to belong</span>
+            </div>
+            <div class="project-content">
+              <div class="project-meta"><span class="project-type">Real estate · Web experience</span><span class="project-no">03 / 04</span></div>
+              <h3>Nestora</h3>
+              <p>A real-estate experience concept designed to make searching, comparing and exploring homes feel more intuitive.</p>
+              <div class="project-footer"><div class="tags"><span class="tag">Information Architecture</span><span class="tag">Web UI</span></div><button class="text-link" data-project="nestora">Explore concept <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></button></div>
+            </div>
+          </article>
+
+          <article class="project-card reveal">
+            <div class="project-art art-stockflow" data-image-key="stockflow">
+              <div class="art-window"><div class="window-bar"><i></i><i></i><i></i></div><div class="window-layout"><div class="window-side"><i></i><i></i><i></i><i></i></div><div class="window-main"><div class="window-title"></div><div class="window-line"></div><div class="window-line short"></div><div class="window-cards"><i></i><i></i><i></i></div></div></div></div>
+              <span class="status-badge art-status"><i></i> In progress</span>
+              <span class="art-label">Inventory · Orders · Clarity</span>
+            </div>
+            <div class="project-content">
+              <div class="project-meta"><span class="project-type">SaaS · Product concept</span><span class="project-no">04 / 04</span></div>
+              <h3>StockFlow</h3>
+              <p>A warehouse management concept for small and medium e-commerce businesses to manage inventory and order fulfilment.</p>
+              <div class="project-footer"><div class="tags"><span class="tag">Dashboard</span><span class="tag">Workflow</span><span class="tag">SaaS UI</span></div><button class="text-link" data-project="stockflow">Explore concept <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></button></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section about-section" id="about" aria-labelledby="aboutTitle">
+      <div class="container about-grid">
+        <div class="about-visual reveal" id="aboutVisual" aria-hidden="true">
+          <div class="about-frame" id="aboutFrame">
+            <div class="about-art"><span class="about-arch"></span><span class="about-sun"></span><span class="about-dot"></span></div>
+            <span class="frame-caption">Designing with intent</span>
+          </div>
+          <div class="about-sticker">Curiosity → Clarity → Craft</div>
+        </div>
+        <div class="about-copy reveal">
+          <span class="section-kicker">A little about me</span>
+          <h2 class="section-heading" id="aboutTitle">Design is more than how it <em>looks.</em></h2>
+          <p>I'm Ummay Salma, a Product Designer and UI &amp; UX Designer with a background in Graphic Design. I enjoy exploring how people interact with digital products and shaping those insights into clear, useful interfaces.</p>
+          <p>My approach brings together visual craft, structured thinking and empathy. I care about the details—from information hierarchy and accessibility to the small interactions that make a product feel effortless.</p>
+          <div class="about-values">
+            <div class="value-card"><span>✦</span> Curious by nature</div>
+            <div class="value-card"><span>⌁</span> Detail-oriented</div>
+            <div class="value-card"><span>◎</span> User-focused</div>
+            <div class="value-card"><span>↗</span> Always learning</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="process" aria-labelledby="processTitle">
+      <div class="container">
+        <div class="reveal"><span class="section-kicker">How I work</span><h2 class="section-heading" id="processTitle">From a question to a <em>clear experience.</em></h2><p class="section-copy">A flexible, human-centered process helps me make design decisions with purpose—not just decoration.</p></div>
+        <div class="process-grid">
+          <article class="process-card reveal"><div class="process-top"><span class="process-number">01 / DISCOVER</span><div class="process-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5M8 10.8h5.6M10.8 8v5.6"/></svg></div></div><h3>Research</h3><p>Understand users, context, needs and pain points.</p></article>
+          <article class="process-card reveal"><div class="process-top"><span class="process-number">02 / DEFINE</span><div class="process-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 5h14v14H5zM8 9h8M8 12h5M8 15h7"/></svg></div></div><h3>Define</h3><p>Frame the right problem and align on priorities.</p></article>
+          <article class="process-card reveal"><div class="process-top"><span class="process-number">03 / EXPLORE</span><div class="process-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"/><path d="m19 16 .8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16Z"/></svg></div></div><h3>Ideate</h3><p>Explore flows, structure and possible solutions.</p></article>
+          <article class="process-card reveal"><div class="process-top"><span class="process-number">04 / CREATE</span><div class="process-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 4h16v16H4zM4 9h16M9 9v11"/><path d="M12 13h5M12 16h5"/></svg></div></div><h3>Design</h3><p>Build wireframes, interfaces and prototypes.</p></article>
+          <article class="process-card reveal"><div class="process-top"><span class="process-number">05 / REFINE</span><div class="process-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m5 12 4 4L19 6"/><path d="M20 12a8 8 0 1 1-4-6.9"/></svg></div></div><h3>Validate</h3><p>Test, learn and improve the experience.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="skills" aria-labelledby="skillsTitle">
+      <div class="container skills-layout">
+        <div class="reveal"><span class="section-kicker">My toolkit</span><h2 class="section-heading" id="skillsTitle">Good thinking. <em>Useful tools.</em></h2><p class="section-copy">A mix of UX methods and visual design skills helps me move from early ideas to polished, practical interfaces.</p></div>
+        <div class="skill-groups reveal">
+          <div class="skill-box"><h3><span>◈</span> UX &amp; Research</h3><div class="skill-pills"><span>User Research</span><span>Personas</span><span>Journey Mapping</span><span>Card Sorting</span><span>Information Architecture</span><span>User Flows</span></div></div>
+          <div class="skill-box"><h3><span>▧</span> UI &amp; Interaction</h3><div class="skill-pills"><span>Wireframing</span><span>Visual Design</span><span>Prototyping</span><span>Responsive UI</span><span>Design Systems</span><span>Accessibility</span></div></div>
+          <div class="skill-box"><h3><span>✳</span> Design Tools</h3><div class="skill-pills"><span>Figma</span><span>Adobe Illustrator</span><span>Adobe Photoshop</span><span>Adobe InDesign</span></div></div>
+          <div class="skill-box"><h3><span>⌘</span> Visual &amp; Creative</h3><div class="skill-pills"><span>Graphic Design</span><span>Brand Identity</span><span>Layout Design</span><span>AI-assisted Visuals</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact" aria-labelledby="contactTitle">
+      <div class="container">
+        <div class="contact-panel reveal">
+          <div class="contact-layout">
+            <div class="contact-main">
+              <span class="section-kicker">Have a project in mind?</span>
+              <h2 id="contactTitle">Let's create something <em>meaningful.</em></h2>
+              <p>I'm always interested in thoughtful conversations, creative collaborations and opportunities to solve real user problems through design.</p>
+              <div class="contact-email"><span class="contact-email-icon" aria-hidden="true">✉</span><div class="contact-email-text"><small>Email me at</small><a href="mailto:salmamonowara@gmail.com" data-email-link>salmamonowara@gmail.com</a></div><button class="copy-email" id="copyEmail" type="button">Copy</button></div>
+              <div class="contact-actions">
+                <a class="button" href="https://www.behance.net/ummaysalma82" target="_blank" rel="noopener noreferrer">View my Behance <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
+                <button class="button quiet" id="copyProfile" type="button">Copy Behance link</button>
+              </div>
+              <div class="social-links"><a href="https://www.behance.net/ummaysalma82" target="_blank" rel="noopener noreferrer">Behance ↗</a><a href="#top">Back to top ↑</a></div>
+            </div>
+
+            <form class="contact-form" id="questionForm" novalidate>
+              <h3>Have any question?</h3>
+              <p class="form-intro">Write your question below and it will go straight to my inbox.</p>
+              <div class="field"><label for="qName">Name</label><input id="qName" name="name" type="text" autocomplete="name" placeholder="Your name" maxlength="80" required /><span class="error-text">Please enter your name.</span></div>
+              <div class="field"><label for="qEmail">Email</label><input id="qEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" maxlength="120" required /><span class="error-text">Please enter a valid email address.</span></div>
+              <div class="field"><label for="qMessage">Message</label><textarea id="qMessage" name="message" placeholder="What would you like to ask?" maxlength="2000" required></textarea><span class="error-text">Please write a short message.</span></div>
+              <div class="hp-field" aria-hidden="true"><label>Leave this field empty<input type="text" name="_honey" tabindex="-1" autocomplete="off" /></label></div>
+              <button class="button form-submit" id="formSubmit" type="submit">Send question <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></button>
+              <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="container footer-inner"><span>© <span id="year"></span> Ummay Salma. Designed with intention.</span><a class="back-top" href="#top">Back to top ↑</a></div></footer>
+
+  <dialog id="projectDialog" aria-labelledby="dialogTitle">
+    <div class="dialog-inner">
+      <div class="dialog-top"><div><span class="eyebrow">Project overview</span><h3 id="dialogTitle">Project title</h3><span class="status-badge dialog-status" id="dialogStatus" hidden><i></i><span id="dialogStatusText"></span></span></div><button class="dialog-close" id="dialogClose" aria-label="Close project details">✕</button></div>
+      <p id="dialogDescription"></p>
+      <div class="dialog-details"><div class="dialog-detail"><small>Focus</small><strong id="dialogFocus"></strong></div><div class="dialog-detail"><small>Design approach</small><strong id="dialogApproach"></strong></div></div>
+      <a class="case-link" id="dialogLink" href="#" target="_blank" rel="noopener noreferrer" hidden><span><small id="dialogLinkKicker">Full case study</small><strong id="dialogLinkText">View on Behance</strong></span><span class="case-link-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg></span></a>
+    </div>
+  </dialog>
+
+  <script>
+    /* =========================================================
+       SITE_CONFIG — the only place you need to edit for:
+       logo image, section images, contact email and where the
+       question form goes. See DOCUMENTATION.md for step-by-step setup.
+    ========================================================= */
+    const SITE_CONFIG = {
+      email: 'salmamonowara@gmail.com',
+
+      // LOGO: leave '' to show the typographic "US" logo.
+      // To use your own logo image, put the file next to this page and write its path, e.g. 'assets/logo.png'
+      // (PNG / SVG / WebP with transparent background works best).
+      logoImage: '',
+      logoImageAlt: 'Ummay Salma logo',
+      hideNameWithLogo: false,   // true = show only the image (hide the "ummaysalma." text beside it)
+
+      // QUESTION FORM, option A — send each question to the email above (free, no account needed).
+      // The first time anyone submits, FormSubmit emails you an activation link: click it once.
+      // Set to '' to turn this off.
+      formEmailEndpoint: 'https://formsubmit.co/ajax/salmamonowara@gmail.com',
+
+      // QUESTION FORM, option B — also save each question to Google Sheets / Google Docs via Google Apps Script.
+      // Paste your deployed Web App URL here (setup steps are in DOCUMENTATION.md). '' = off.
+      googleScriptUrl: '',
+
+      // IMAGES — replace the drawn placeholders with your own pictures.
+      // Put the files in an "assets" folder next to this page and write the path in `src`
+      // (e.g. 'assets/hero.jpg'). Leave src '' to keep the placeholder.
+      // If a path is wrong, the placeholder stays — nothing breaks.
+      // Images are cropped to fill their frame (centre stays visible), so keep the key content in the middle.
+      images: {
+        // Hero (right side). Best size: 1000 x 1250 px (portrait, 4:5).
+        hero: { src: '', alt: 'Ummay Salma — portfolio hero image' },
+
+        // About section. Best size: 1000 x 1000 px (square).
+        about: { src: '', alt: 'Portrait of Ummay Salma' },
+
+        // Work section — one cover per project. Best size: 1600 x 1200 px (landscape, 4:3).
+        projects: {
+          bookloop:  { src: '', alt: 'BookLoop app screens' },
+          delivera:  { src: '', alt: 'Delivera app screens' },
+          nestora:   { src: '', alt: 'Nestora website screens' },
+          stockflow: { src: '', alt: 'StockFlow dashboard screens' }
+        }
+      }
+    };
+
+    // Logo image (optional)
+    (function setupLogo() {
+      const brand = document.querySelector('.brand');
+      const img = document.getElementById('brandLogoImg');
+      if (!SITE_CONFIG.logoImage) return;
+      img.onload = () => {
+        img.alt = SITE_CONFIG.logoImageAlt || '';
+        brand.classList.add('has-logo-image');
+        brand.classList.toggle('hide-name', !!SITE_CONFIG.hideNameWithLogo);
+      };
+      img.onerror = () => brand.classList.remove('has-logo-image', 'hide-name'); // wrong path → keep the "US" logo
+      img.src = SITE_CONFIG.logoImage;
+    })();
+
+    // Custom images (hero, About, project covers) — see SITE_CONFIG.images
+    (function setupImages() {
+      const cfg = SITE_CONFIG.images || {};
+      function load(slot, build) {
+        if (!slot || !slot.src) return;
+        const img = new Image();
+        img.decoding = 'async';
+        img.alt = slot.alt || '';
+        img.onload = () => build(img);
+        img.onerror = () => console.warn('[portfolio] Image not found, keeping the placeholder:', slot.src);
+        img.src = slot.src;
+      }
+
+      // Hero: replaces the drawn placeholder; the two floating labels stay
+      load(cfg.hero, img => {
+        const frame = document.getElementById('heroFrame');
+        img.className = 'hero-image';
+        frame.prepend(img);
+        frame.classList.add('has-image');
+        document.getElementById('heroVisual').removeAttribute('aria-hidden');
+      });
+
+      // About: fills the frame; the caption stays on top of a soft shade
+      load(cfg.about, img => {
+        const frame = document.getElementById('aboutFrame');
+        img.className = 'about-img';
+        frame.prepend(img);
+        frame.classList.add('has-image');
+        document.getElementById('aboutVisual').removeAttribute('aria-hidden');
+      });
+
+      // Work: one cover per project card
+      document.querySelectorAll('.project-art[data-image-key]').forEach(art => {
+        load((cfg.projects || {})[art.dataset.imageKey], img => {
+          img.className = 'project-img';
+          art.prepend(img);
+          art.classList.add('has-image');
+        });
+      });
+    })();
+
+    // Email: keep every email link/text in sync with SITE_CONFIG.email
+    document.querySelectorAll('[data-email-link]').forEach(link => {
+      link.href = 'mailto:' + SITE_CONFIG.email;
+      link.textContent = SITE_CONFIG.email;
+    });
+
+    // Mobile navigation
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    menuToggle.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', String(isOpen));
+      menuToggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+    });
+    navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuToggle.setAttribute('aria-label', 'Open navigation menu');
+    }));
+
+    // Add a soft header surface after scrolling
+    const header = document.querySelector('.site-header');
+    const updateHeader = () => header.classList.toggle('scrolled', window.scrollY > 18);
+    updateHeader();
+    window.addEventListener('scroll', updateHeader, { passive: true });
+
+    // Reveal sections when they enter the viewport; show all when reduced motion is preferred
+    const revealItems = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      revealItems.forEach(item => observer.observe(item));
+    } else {
+      revealItems.forEach(item => item.classList.add('visible'));
+    }
+
+    // Project overview dialog
+    const projectInfo = {
+      bookloop: {
+        title: 'BookLoop',
+        description: 'A book-sharing product concept that connects readers and makes borrowing or sharing pre-loved books feel simple, organized and community-oriented.',
+        focus: 'Book discovery and sharing',
+        approach: 'Research · User flows · Mobile UI',
+        link: 'https://www.behance.net/gallery/250607159/Bookloop-Book-sharing-appUX-case-studyUI-design',
+        linkKicker: 'Full case study',
+        linkLabel: 'View BookLoop on Behance'
+      },
+      delivera: {
+        title: 'Delivera',
+        description: 'A parcel delivery app concept that supports a clear booking process and gives people confidence through understandable, timely tracking information.',
+        focus: 'Parcel booking and tracking',
+        approach: 'Problem framing · Flow design · UI',
+        link: 'https://www.behance.net/gallery/250659977/Delivera-Parcel-Delivery-App-UX-Case-Study',
+        linkKicker: 'Full case study',
+        linkLabel: 'View Delivera on Behance'
+      },
+      nestora: {
+        title: 'Nestora',
+        description: 'A real-estate web experience concept that organizes property discovery and related services into a clearer journey for people looking to buy or rent a home.',
+        focus: 'Property discovery',
+        approach: 'Card sorting · IA · Responsive UI',
+        link: 'https://www.behance.net/gallery/248676665/Nastora-Real-Estate-Rental-UX-Case-Study',
+        linkKicker: 'Full case study',
+        linkLabel: 'View Nestora on Behance'
+      },
+      stockflow: {
+        title: 'StockFlow',
+        description: 'A warehouse management product concept for small and medium e-commerce businesses, with an initial focus on inventory management and order fulfilment.',
+        focus: 'Inventory and order fulfilment',
+        approach: 'Workflow thinking · Dashboard UI',
+        status: 'In progress · full case study coming soon',
+        link: 'https://www.behance.net/gallery/250605963/Styled-Comfort-Clothing-Brand-UI-Design-Landing-page',
+        linkKicker: 'More on Behance',
+        linkLabel: 'Check out my other projects'
+      }
+    };
+    const dialog = document.getElementById('projectDialog');
+    document.querySelectorAll('[data-project]').forEach(button => button.addEventListener('click', () => {
+      const project = projectInfo[button.dataset.project];
+      if (!project) return;
+      document.getElementById('dialogTitle').textContent = project.title;
+      document.getElementById('dialogDescription').textContent = project.description;
+      document.getElementById('dialogFocus').textContent = project.focus;
+      document.getElementById('dialogApproach').textContent = project.approach;
+      const statusEl = document.getElementById('dialogStatus');
+      statusEl.hidden = !project.status;
+      document.getElementById('dialogStatusText').textContent = project.status || '';
+      const linkEl = document.getElementById('dialogLink');
+      linkEl.hidden = !project.link;
+      if (project.link) {
+        linkEl.href = project.link;
+        document.getElementById('dialogLinkKicker').textContent = project.linkKicker || 'Full case study';
+        document.getElementById('dialogLinkText').textContent = project.linkLabel || 'View on Behance';
+      }
+      dialog.showModal();
+    }));
+    document.getElementById('dialogClose').addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+
+    // Clicking a project thumbnail opens the same overview (the "Explore concept" button stays the keyboard-friendly way in)
+    document.querySelectorAll('.project-art').forEach(art => art.addEventListener('click', () => {
+      const button = art.closest('.project-card').querySelector('[data-project]');
+      if (button) button.click();
+    }));
+
+    // Copy the public Behance profile URL
+    document.getElementById('copyProfile').addEventListener('click', async () => {
+      const url = 'https://www.behance.net/ummaysalma82';
+      const button = document.getElementById('copyProfile');
+      try {
+        await navigator.clipboard.writeText(url);
+        button.textContent = 'Link copied ✓';
+      } catch (error) {
+        button.textContent = url;
+      }
+      window.setTimeout(() => { button.textContent = 'Copy Behance link'; }, 2500);
+    });
+
+    // Copy email address
+    document.getElementById('copyEmail').addEventListener('click', async () => {
+      const button = document.getElementById('copyEmail');
+      try {
+        await navigator.clipboard.writeText(SITE_CONFIG.email);
+        button.textContent = 'Copied ✓';
+      } catch (error) {
+        button.textContent = 'Select & copy';
+      }
+      window.setTimeout(() => { button.textContent = 'Copy'; }, 2200);
+    });
+
+    // Back to top — scrolls to the very top (the link target is a plain anchor at the start of the page)
+    document.querySelectorAll('a[href="#top"]').forEach(link => link.addEventListener('click', event => {
+      event.preventDefault();
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      if (history.replaceState) history.replaceState(null, '', '#top');
+    }));
+
+    // Question form: validate, then send to email (FormSubmit) and/or Google Sheets/Docs (Apps Script)
+    (function setupQuestionForm() {
+      const form = document.getElementById('questionForm');
+      const submitBtn = document.getElementById('formSubmit');
+      const statusEl = document.getElementById('formStatus');
+      const submitLabel = submitBtn.firstChild.textContent;
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      function setStatus(type, text) {
+        statusEl.className = 'form-status' + (type ? ' ' + type : '');
+        statusEl.textContent = text;
+      }
+      function setStatusWithMailLink(text) {
+        setStatus('error', text + ' ');
+        const a = document.createElement('a');
+        a.href = 'mailto:' + SITE_CONFIG.email;
+        a.textContent = SITE_CONFIG.email;
+        statusEl.appendChild(a);
+      }
+      function markField(input, isValid) {
+        input.closest('.field').classList.toggle('invalid', !isValid);
+        input.setAttribute('aria-invalid', String(!isValid));
+      }
+
+      form.addEventListener('input', event => {
+        const field = event.target.closest('.field');
+        if (field) field.classList.remove('invalid');
+      });
+
+      form.addEventListener('submit', async event => {
+        event.preventDefault();
+        setStatus('', '');
+
+        const name = form.elements.name.value.trim();
+        const email = form.elements.email.value.trim();
+        const message = form.elements.message.value.trim();
+
+        const nameOk = name.length > 0;
+        const emailOk = emailPattern.test(email);
+        const messageOk = message.length > 2;
+        markField(form.elements.name, nameOk);
+        markField(form.elements.email, emailOk);
+        markField(form.elements.message, messageOk);
+        if (!(nameOk && emailOk && messageOk)) {
+          const firstBad = form.querySelector('.field.invalid input, .field.invalid textarea');
+          if (firstBad) firstBad.focus();
+          return;
+        }
+
+        // Spam trap: real visitors never see/fill this field
+        if (form.elements._honey.value) { form.reset(); setStatus('success', 'Thank you! Your question has been sent.'); return; }
+
+        const payload = {
+          name: name,
+          email: email,
+          message: message,
+          page: window.location.href,
+          submittedAt: new Date().toISOString(),
+          _subject: 'New question from your portfolio website',
+          _template: 'table',
+          _captcha: 'false'
+        };
+
+        const jobs = [];
+        if (SITE_CONFIG.formEmailEndpoint) {
+          jobs.push(fetch(SITE_CONFIG.formEmailEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify(payload)
+          }).then(res => res.json().catch(() => ({})).then(data => {
+            if (!res.ok || String(data.success) === 'false') throw new Error('email delivery failed');
+          })));
+        }
+        if (SITE_CONFIG.googleScriptUrl) {
+          // Apps Script does not return CORS headers, so the reply is opaque; a resolved request means it was delivered.
+          jobs.push(fetch(SITE_CONFIG.googleScriptUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+          }));
+        }
+
+        if (!jobs.length) {
+          setStatusWithMailLink('The form is not connected yet. Please email me at');
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.firstChild.textContent = 'Sending… ';
+        const results = await Promise.allSettled(jobs);
+        submitBtn.disabled = false;
+        submitBtn.firstChild.textContent = submitLabel;
+
+        if (results.some(r => r.status === 'fulfilled')) {
+          form.reset();
+          setStatus('success', 'Thank you! Your question has been sent. I will reply to your email soon.');
+        } else {
+          setStatusWithMailLink('Sorry, something went wrong and your message was not sent. Please email me directly at');
+        }
+      });
+    })();
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
